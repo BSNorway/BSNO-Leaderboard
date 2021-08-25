@@ -1,0 +1,13 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "BSNO_Score_Uploader",
+  "name": "BSNO Score Uploader",
+  "author": "BungiCraft",
+  "version": "0.0.3",
+  "description": "Gets specific scores from game so they can be used for BSNO weekly challenge",
+  "gameVersion": "1.16.4",
+  "dependsOn": {
+    "BSIPA": "^4.0.5"
+  },
+  "features": []
+}
