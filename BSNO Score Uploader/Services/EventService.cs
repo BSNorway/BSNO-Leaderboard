@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using BS_Utils.Utilities;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace BSNO_Score_Uploader.Services
 {
