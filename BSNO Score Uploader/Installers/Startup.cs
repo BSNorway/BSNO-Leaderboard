@@ -19,7 +19,7 @@ namespace BSNO_Score_Uploader.Installers
         private void SummonFlowCoordinator()
         {
             var flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModMenuController>();
-            if (flowCoordinator != null)
+            if (flowCoordinator != null) return;
                 BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(flowCoordinator);
         }
     }
