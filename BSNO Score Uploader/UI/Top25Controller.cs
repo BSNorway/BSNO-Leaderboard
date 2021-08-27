@@ -32,7 +32,6 @@ namespace BSNO_Score_Uploader.UI.Views
             {
                 Console.WriteLine("Error. No response!");
             }
-            Console.WriteLine(response);
             
             List<LeaderboardDataObject> dataList = new List<LeaderboardDataObject>();
             JObject data = JObject.Parse(response);

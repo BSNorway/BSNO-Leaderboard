@@ -91,7 +91,8 @@ namespace BSNO_Score_Uploader.UI
                 {
                     username = item["username"].ToString(),
                     score = Int32.Parse(item["score"].ToString()),
-                    scorePr = item["scorePr"].ToString()
+                    scorePr = item["scorePr"].ToString(),
+                    WP = Int32.Parse(item["WP"].ToString())
                 };
                 userClassList.Add(c);
             }
@@ -102,47 +103,55 @@ namespace BSNO_Score_Uploader.UI
         {
             list25.data.Clear();
             list26.data.Clear();
-            string response25 = await GetAsync($"{webServerUrl}/getTop25Users");
-            string response26 = await GetAsync($"{webServerUrl}/getTop26Users");
-            if (response25 == null || response26 == null)
+            string response = await GetAsync($"{webServerUrl}/getTopUsers");
+            if (response == null)
             {
                 Console.WriteLine("Error");
                 return;
             }
             List<UserObject> userClassList25 = new List<UserObject>();
             List<UserObject> userClassList26 = new List<UserObject>();
-            JObject data25 = JObject.Parse(response25);
-            JObject data26 = JObject.Parse(response26);
+            JObject data = JObject.Parse(response);
             switch (songCat)
             {
                 case "acc":
-                    userClassList25 = await ParseJsonToObject(data25, "acc");
-                    userClassList26 = await ParseJsonToObject(data26, "acc");
+                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "acc");
+                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "acc");
                     break;
                 case "mid":
-                    userClassList25 = await ParseJsonToObject(data25, "mid");
-                    userClassList26 = await ParseJsonToObject(data26, "mid");
+                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "mid");
+                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "mid");
                     break;
                 case "speed":
-                    userClassList25 = await ParseJsonToObject(data25, "speed");
-                    userClassList26 = await ParseJsonToObject(data26, "speed");
+                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "speed");
+                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "speed");
                     break;
                 case "funny":
-                    userClassList25 = await ParseJsonToObject(data25, "funny");
-                    userClassList26 = await ParseJsonToObject(data26, "funny");
+                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "funny");
+                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "funny");
                     break;
             }
 
             list25.data.AddRange(Enumerable.Range(0, userClassList25.Count).Select(i =>
             {
-                int pointNum = 10 - i;
-                int userPoints = 0;
-                if (pointNum > 0) // Calculates the number of points the player has on that map
-                {
-                    userPoints = pointNum;
-                }
                 string rawFirstListLine = $"   {i + 1}#  {userClassList25[i].username}";
-                string rawSecondListLine = $"{userClassList25[i].score} --- {userClassList25[i].scorePr + "%"} --- {userPoints} WP   ";
+                string rawSecondListLine = $"{userClassList25[i].score} --- {userClassList25[i].scorePr + "%"} --- {userClassList25[i].WP} WP   ";
+                string combinedString = rawFirstListLine + rawSecondListLine;
+                int num = 60 - combinedString.Length;
+
+                string spaceString = " ";
+                for (int ind = 0; ind < num - 1; ind++)
+                {
+                    spaceString += " ";
+                }
+                string listLine = rawFirstListLine + spaceString + rawSecondListLine;
+                return new CustomListTableData.CustomCellInfo(listLine);
+            }).ToList());
+
+            list26.data.AddRange(Enumerable.Range(0, userClassList26.Count).Select(i =>
+            {
+                string rawFirstListLine = $"   {i + 1}#  {userClassList26[i].username}";
+                string rawSecondListLine = $"{userClassList26[i].score} --- {userClassList26[i].scorePr + "%"} --- {userClassList26[i].WP} WP   ";
                 string combinedString = rawFirstListLine + rawSecondListLine;
                 int num = 60 - combinedString.Length;
 
@@ -155,27 +164,6 @@ namespace BSNO_Score_Uploader.UI
                 return new CustomListTableData.CustomCellInfo(listLine);
             }).ToList());
             list25.tableView?.ReloadData();
-            list26.data.AddRange(Enumerable.Range(0, userClassList26.Count).Select(i =>
-            {
-                int pointNum = 10 - i;
-                int userPoints = 0;
-                if (pointNum > 0) // Calculates the number of points the player has on that map
-                {
-                    userPoints = pointNum;
-                }
-                string rawFirstListLine = $"   {i + 1}#  {userClassList26[i].username}";
-                string rawSecondListLine = $"{userClassList26[i].score} --- {userClassList26[i].scorePr + "%"} --- {userPoints} WP   ";
-                string combinedString = rawFirstListLine + rawSecondListLine;
-                int num = 60 - combinedString.Length;
-
-                string spaceString = " ";
-                for (int ind = 0; ind < num - 1; ind++)
-                {
-                    spaceString += " ";
-                }
-                string listLine = rawFirstListLine + spaceString + rawSecondListLine;
-                return new CustomListTableData.CustomCellInfo(listLine);
-            }).ToList());
             list26.tableView?.ReloadData();
         }
 
@@ -199,6 +187,7 @@ namespace BSNO_Score_Uploader.UI
         public string username;
         public int score;
         public string scorePr;
+        public int WP;
     }
 
     class WeeklySongsObject

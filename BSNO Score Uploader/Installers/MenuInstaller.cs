@@ -22,7 +22,7 @@ namespace BSNO_Score_Uploader.Installers
             Container.Bind<SongLeaderboardController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<Top25Controller>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<Top26Controller>().FromNewComponentAsViewController().AsSingle();
-            Container.BindInterfacesTo<MenuButtonUI>();
+            Container.BindInterfacesTo<MenuButtonUI>().AsSingle();
         }
     }
 }
