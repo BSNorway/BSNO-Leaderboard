@@ -10,7 +10,7 @@ namespace BSNO_Score_Uploader.Installers
 
         public void AddButton()
         {
-            if (_menuButton != null) return;
+            if (_menuButton = null) return;
                 _menuButton = new MenuButton("BSNO", "BSNO weekly leaderboard", SummonFlowCoordinator);
 
             MenuButtons.instance.RegisterButton(_menuButton);
