@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace BSNO_Score_Uploader.Services
 {
-    public class EventService : IInitializable
+    public class EventService
     {
         public void Initialize()
         {
