@@ -7,16 +7,11 @@ using Newtonsoft.Json;
 
 namespace BSNO_Score_Uploader.Services
 {
-    public class EventService : IDisposable
+    public class EventService : IInitializable
     {
         public void Initialize()
         {
             BSEvents.levelCleared += BSEvents_levelLeft;
-        }
-
-        public void Dispose()
-        {
-            Console.WriteLine("BSNO ScoreUploader disposed");
         }
 
         async private void BSEvents_levelLeft(StandardLevelScenesTransitionSetupDataSO arg1, LevelCompletionResults arg2)
