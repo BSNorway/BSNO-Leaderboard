@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 namespace BSNO_Score_Uploader.UI.Views
 {
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.Top26Leaderboard.bsml")]
-    class Top26Controller : BSMLAutomaticViewController
+    public class Top26Controller : BSMLAutomaticViewController
     {
         private string webServerUrl = "http://84.212.119.6:8260";
 

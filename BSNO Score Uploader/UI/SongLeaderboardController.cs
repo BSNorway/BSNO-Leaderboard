@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
-using UnityEngine;
 using System.Threading.Tasks;
 using System.Net;
 using System.IO;
@@ -13,7 +12,7 @@ using Newtonsoft.Json.Linq;
 namespace BSNO_Score_Uploader.UI
 {
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.song-leaderboard.bsml")]
-    class SongLeaderboardController : BSMLAutomaticViewController
+    public class SongLeaderboardController : BSMLAutomaticViewController
     {
         private string webServerUrl = "http://84.212.119.6:8260";
 
