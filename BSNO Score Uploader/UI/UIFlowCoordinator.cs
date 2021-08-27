@@ -34,9 +34,6 @@ namespace BSNO_Score_Uploader.UI
                 {
                     SetTitle("BSNO Leaderboard");
                     showBackButton = true;
-                    //_songLeaderboardController = BeatSaberUI.CreateViewController<SongLeaderboardController>();
-                    //_top25Controller = BeatSaberUI.CreateViewController<Top25Controller>();
-                    //_top26Controller = BeatSaberUI.CreateViewController<Top26Controller>();
                     this.ProvideInitialViewControllers(_songLeaderboardController, _top26Controller, _top25Controller);
                 }
             }
