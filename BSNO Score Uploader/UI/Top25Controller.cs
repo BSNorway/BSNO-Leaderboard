@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using HMUI;
 
 namespace BSNO_Score_Uploader.UI.Views
 {
@@ -19,6 +20,21 @@ namespace BSNO_Score_Uploader.UI.Views
         [UIComponent("list25")]
         private CustomListTableData list;
 
+        [UIAction("listUp")]
+        private void ClickListUp()
+        {
+            List<TableCell> tableCellList = list.tableView.visibleCells.ToList();
+            if (tableCellList[0].idx - 6 > 0) return;
+            list.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 6, TableView.ScrollPositionType.Beginning, true);
+        }
+        [UIAction("listDown")]
+        private void ClickListDown()
+        {
+            List<TableCell> tableCellList = list.tableView.visibleCells.ToList();
+            if (tableCellList[0].idx - 6 > 0) return;
+            list.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 6, TableView.ScrollPositionType.Beginning, true);
+        }
+
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
@@ -27,6 +43,7 @@ namespace BSNO_Score_Uploader.UI.Views
 
         private async void LoadLeaderboard()
         {
+            list.data.Clear();
             string response = await GetAsync($"{webServerUrl}/getTop25UsersPoints");
             if (response == null)
             {
@@ -45,7 +62,6 @@ namespace BSNO_Score_Uploader.UI.Views
                 };
                 dataList.Add(c);
             }
-            Console.WriteLine(dataList[0]);
             list.data.AddRange(Enumerable.Range(0, dataList.Count).Select(i =>
             {
                 string rawFirstListLine = $"   {i + 1}#  {dataList[i].username}";

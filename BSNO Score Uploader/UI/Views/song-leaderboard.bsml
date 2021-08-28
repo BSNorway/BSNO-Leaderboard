@@ -11,15 +11,15 @@
   <horizontal spacing='4'>
     <vertical>
       <text text='Top 26+' align='Center' font-size='4'></text>
-      <page-button click-event='list#PageUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+      <page-button on-click='listUp26' direction='Up' pref-width='30' pref-height='5'></page-button>
       <list id='list26' list-style='Simple' list-width='80' visible-cells='4'></list>
-      <page-button click-event='list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>
+      <page-button on-click='listDown26' direction='Down' pref-width='30' pref-height='5'></page-button>
     </vertical>
     <vertical>
       <text text='Top 25' align='Center' font-size='4'></text>
-      <page-button click-event='list#PageUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+      <page-button on-click='listUp25' direction='Up' pref-width='30' pref-height='5'></page-button>
       <list id='list25' list-style='Simple' list-width='80' visible-cells='4'></list>
-      <page-button click-event='list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>
+      <page-button on-click='listDown25' direction='Down' pref-width='30' pref-height='5'></page-button>
     </vertical>
   </horizontal>
   

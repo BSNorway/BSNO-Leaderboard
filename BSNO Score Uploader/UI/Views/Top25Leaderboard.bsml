@@ -2,7 +2,7 @@
   <horizontal bg='panel-top' pad-left='15' pad-right='15' horizontal-fit='PreferredSize'>
     <text text='Top 25' align='Center' font-size='8'/>
   </horizontal>
-  <page-button click-event='list#PageUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+  <page-button on-click='listUp' direction='Up' pref-width='30' pref-height='5'></page-button>
   <list id='list25' list-style='Simple' list-width='100' visible-cells='6'></list>
-  <page-button click-event='list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>
+  <page-button on-click='listDown' direction='Down' pref-width='30' pref-height='5'></page-button>
 </vertical>

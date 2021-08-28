@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using HMUI;
 
 namespace BSNO_Score_Uploader.UI
 {
@@ -30,10 +31,41 @@ namespace BSNO_Score_Uploader.UI
         [UIComponent("list26")]
         private CustomListTableData list26;
 
+        // List scrolling
+        [UIAction("listUp25")]
+        private void ClickListUp25()
+        {
+            List<TableCell> tableCellList = list25.tableView.visibleCells.ToList();
+            if (tableCellList[0].idx - 4 > 0) return;
+            list25.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
+        }
+        [UIAction("listDown25")]
+        private void ClickListDown25()
+        {
+            List<TableCell> tableCellList = list25.tableView.visibleCells.ToList();
+            if (tableCellList[0].idx + 4 >= list25.tableView.numberOfCells) return;
+            list25.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
+        }
+        [UIAction("listUp26")]
+        private void ClickListUp26()
+        {
+            List<TableCell> tableCellList = list26.tableView.visibleCells.ToList();
+            if (tableCellList[0].idx - 4 > 0) return;
+            list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
+        }
+        [UIAction("listDown26")]
+        private void ClickListDown26()
+        {
+            List<TableCell> tableCellList = list26.tableView.visibleCells.ToList();
+            if (tableCellList[0].idx + 4 >= list26.tableView.numberOfCells) return;
+            list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
+        }
+
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            list25.data.Clear();
+            list26.data.Clear();
             _ = GetWeeklySongs();
         }
 
