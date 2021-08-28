@@ -4,10 +4,11 @@ using System.Net;
 using System.Threading.Tasks;
 using BS_Utils.Utilities;
 using Newtonsoft.Json;
+using Zenject;
 
 namespace BSNO_Score_Uploader.Services
 {
-    public class EventService
+    public class EventService : IInitializable
     {
         public void Initialize()
         {
