@@ -2,7 +2,6 @@
 using Zenject;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.MenuButtons;
-using BSNO_Score_Uploader.UI;
 
 namespace BSNO_Score_Uploader.UI
 {

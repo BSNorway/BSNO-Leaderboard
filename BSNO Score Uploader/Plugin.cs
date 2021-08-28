@@ -1,6 +1,4 @@
 ﻿using IPA;
-using UnityEngine;
-using BSNO_Score_Uploader.Services;
 using BSNO_Score_Uploader.Installers;
 using IPALogger = IPA.Logging.Logger;
 using SiraUtil.Zenject;
