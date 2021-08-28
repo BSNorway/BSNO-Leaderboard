@@ -36,28 +36,34 @@ namespace BSNO_Score_Uploader.UI
         private void ClickListUp25()
         {
             List<TableCell> tableCellList = list25.tableView.visibleCells.ToList();
-            if (tableCellList[0].idx - 4 > 0) return;
+            if (tableCellList[0].idx == 3)
+            {
+                list25.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
+                return;
+            }
             list25.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
         }
         [UIAction("listDown25")]
         private void ClickListDown25()
         {
             List<TableCell> tableCellList = list25.tableView.visibleCells.ToList();
-            if (tableCellList[0].idx + 4 >= list25.tableView.numberOfCells) return;
             list25.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
         }
         [UIAction("listUp26")]
         private void ClickListUp26()
         {
             List<TableCell> tableCellList = list26.tableView.visibleCells.ToList();
-            if (tableCellList[0].idx - 4 > 0) return;
+            if (tableCellList[0].idx == 3)
+            {
+                list26.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
+                return;
+            }
             list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
         }
         [UIAction("listDown26")]
         private void ClickListDown26()
         {
             List<TableCell> tableCellList = list26.tableView.visibleCells.ToList();
-            if (tableCellList[0].idx + 4 >= list26.tableView.numberOfCells) return;
             list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
         }
 

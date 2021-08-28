@@ -24,14 +24,17 @@ namespace BSNO_Score_Uploader.UI.Views
         private void ClickListUp()
         {
             List<TableCell> tableCellList = list.tableView.visibleCells.ToList();
-            if (tableCellList[0].idx - 6 > 0) return;
+            if (tableCellList[0].idx == 5)
+            {
+                list.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
+                return;
+            }
             list.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 6, TableView.ScrollPositionType.Beginning, true);
         }
         [UIAction("listDown")]
         private void ClickListDown()
         {
             List<TableCell> tableCellList = list.tableView.visibleCells.ToList();
-            if (tableCellList[0].idx + 6 >= list.tableView.numberOfCells) return;
             list.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 6, TableView.ScrollPositionType.Beginning, true);
         }
 
