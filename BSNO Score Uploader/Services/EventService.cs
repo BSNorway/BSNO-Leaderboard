@@ -87,9 +87,9 @@ namespace BSNO_Score_Uploader.Services
                 string songDiff = arg1.difficultyBeatmap.difficultyRank.ToString();
                 int totalNotes = BS_Utils.Plugin.LevelData.GameplayCoreSceneSetupData.difficultyBeatmap.beatmapData.cuttableNotesType;
                 DateTime currentDate = DateTime.Now;
-                string modVersion = "0.0.3";
+                string modVersion = "0.0.4";
 
-                var httpWebReq = (HttpWebRequest)WebRequest.Create("http://84.212.119.6:8260/json");
+                var httpWebReq = (HttpWebRequest)WebRequest.Create("http://84.212.119.6:8260/v2/json");
                 httpWebReq.ContentType = "application/json";
                 httpWebReq.Method = "POST";
                 httpWebReq.Timeout = 400;
