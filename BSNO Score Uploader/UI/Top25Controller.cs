@@ -47,7 +47,7 @@ namespace BSNO_Score_Uploader.UI.Views
         private async void LoadLeaderboard()
         {
             list.data.Clear();
-            string response = await GetAsync($"{webServerUrl}/getTop25UsersPoints");
+            string response = await GetAsync($"{webServerUrl}/v2/getTop25UsersPoints");
             if (response == null)
             {
                 Console.WriteLine("Error. No response!");
@@ -55,7 +55,7 @@ namespace BSNO_Score_Uploader.UI.Views
             
             List<LeaderboardDataObject> dataList = new List<LeaderboardDataObject>();
             JObject data = JObject.Parse(response);
-            foreach (var item in data["lead"])
+            foreach (var item in data["users"])
             {
                 LeaderboardDataObject c = new LeaderboardDataObject
                 {

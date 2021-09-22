@@ -9,29 +9,85 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using HMUI;
+using TMPro;
 
 namespace BSNO_Score_Uploader.UI
 {
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.song-leaderboard.bsml")]
     public class SongLeaderboardController : BSMLAutomaticViewController
     {
-        private string webServerUrl = "http://84.212.119.6:8260";
+        private readonly string webServerUrl = "http://84.212.119.6:8260";
+        private JObject totalScoreData;
+        private List<WeeklySongsObject> weeklySongsList;
+        private int weeklySongsListIndex = 0;
 
-        [UIAction("btn1Click")]
-        private void ClickBtn1() => ClickBtn1Action();
-        [UIAction("btn2Click")]
-        private void ClickBtn2() => ClickBtn2Action();
-        [UIAction("btn3Click")]
-        private void ClickBtn3() => ClickBtn3Action();
-        [UIAction("btn4Click")]
-        private void ClickBtn4() => ClickBtn4Action();
+        protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            list25.data.Clear();
+            list26.data.Clear();
+            totalScoreData = await GetTotalScores();
+            weeklySongsList = await GetWeeklySongs();
+            if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
+            {
+                clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n({weeklySongsList[weeklySongsListIndex].type})";
+            } else
+            {
+                clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n({weeklySongsList[weeklySongsListIndex].type})";
+            }
+            
+        }
+
+        #region SelectionUI
+
+        [UIComponent("clickTxt")]
+        private TextMeshProUGUI clickTxt;
+
+        [UIAction("selectTxtClick")]
+        private void SelectTxtClick() => UpdateLeaderboards();
+
+        [UIAction("listLeft")]
+        private void ClickListLeft()
+        {
+            if (weeklySongsListIndex != 0)
+            {
+                weeklySongsListIndex--;
+                if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
+                {
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n({weeklySongsList[weeklySongsListIndex].type})";
+                }
+                else
+                {
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n({weeklySongsList[weeklySongsListIndex].type})";
+                }
+            }
+        }
+        [UIAction("listRight")]
+        private void ClickListRight()
+        {
+            if (weeklySongsListIndex != weeklySongsList.Count - 1)
+            {
+                weeklySongsListIndex++;
+                if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
+                {
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n({weeklySongsList[weeklySongsListIndex].type})";
+                }
+                else
+                {
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n({weeklySongsList[weeklySongsListIndex].type})";
+                }
+            }
+        }
+
+        #endregion
+
+        #region TopLeaderboards
 
         [UIComponent("list25")]
         private CustomListTableData list25;
         [UIComponent("list26")]
         private CustomListTableData list26;
 
-        // List scrolling
         [UIAction("listUp25")]
         private void ClickListUp25()
         {
@@ -67,109 +123,91 @@ namespace BSNO_Score_Uploader.UI
             list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
         }
 
-        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
-        {
-            base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-            list25.data.Clear();
-            list26.data.Clear();
-            _ = GetWeeklySongs();
-        }
+        #endregion
 
-        private async Task<WeeklySongsObject> GetWeeklySongs()
+        #region GetMethods
+
+        private async Task<List<WeeklySongsObject>> GetWeeklySongs()
         {
-            string response = await GetAsync($"{webServerUrl}/getWeeklyMaps");
+            string response = await GetAsync($"{webServerUrl}/v2/getWeeklyMaps");
             if (response == null)
             {
                 Console.WriteLine("Error. No response!");
-                WeeklySongsObject empty = new WeeklySongsObject();
-                return empty;
+                return new List<WeeklySongsObject>();
             }
 
+            List<WeeklySongsObject> songList = new List<WeeklySongsObject>();
             JObject data = JObject.Parse(response);
-            WeeklySongsObject weeklySongs = new WeeklySongsObject
+            foreach (var song in data["songs"])
             {
-                currentAccSong = data["currentAccSong"].ToString(),
-                currentAccSongDiff = data["currentAccSongDiff"].ToString(),
-                currentMidSong = data["currentMidSong"].ToString(),
-                currentMidSongDiff = data["currentMidSongDiff"].ToString(),
-                currentSpeedSong = data["currentSpeedSong"].ToString(),
-                currentSpeedSongDiff = data["currentSpeedSongDiff"].ToString(),
-                currentFunnySong = data["currentFunnySong"].ToString(),
-                currentFunnySongDiff = data["currentFunnySongDiff"].ToString()
-            };
-            return weeklySongs;
+                WeeklySongsObject weeklySongs = new WeeklySongsObject();
+                weeklySongs.hash = song["hash"].ToString();
+                weeklySongs.diff = song["diff"].ToString();
+                weeklySongs.type = song["type"].ToString();
+                weeklySongs.points = song["points"].ToString();
+                weeklySongs.songName = song["songName"].ToString();
+                songList.Add(weeklySongs);
+            }
+            return songList;
         }
 
-        private void ClickBtn1Action()
+        private async Task<JObject> GetTotalScores()
         {
-            UpdateLeaderboards("acc");
+            string response = await GetAsync($"{webServerUrl}/v2/getTopUsers");
+            if (response == null)
+            {
+                Console.WriteLine("Error");
+                return new JObject();
+            }
+            return JObject.Parse(response);
         }
 
-        private void ClickBtn2Action()
+        private async Task<string> GetAsync(string url)
         {
-            UpdateLeaderboards("mid");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            request.Timeout = 400;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
         }
 
-        private void ClickBtn3Action()
-        {
-            UpdateLeaderboards("speed");
-        }
+        #endregion
 
-        private void ClickBtn4Action()
-        {
-            UpdateLeaderboards("funny");
-        }
-
-        private async Task<List<UserObject>> ParseJsonToObject(JObject data, string songCat)
+        private async Task<List<UserObject>> ParseJsonToObject(JToken data, string hash)
         {
             List<UserObject> userClassList = new List<UserObject>();
-            foreach (var item in data[songCat])
+            foreach (var songs in data)
             {
-                UserObject c = new UserObject
+                if (songs["hash"].ToString() == hash)
                 {
-                    username = item["username"].ToString(),
-                    score = Int32.Parse(item["score"].ToString()),
-                    scorePr = item["scorePr"].ToString(),
-                    WP = Int32.Parse(item["WP"].ToString())
-                };
-                userClassList.Add(c);
+                    foreach (var score in songs["scores"])
+                    {
+                        UserObject user = new UserObject
+                        {
+                            username = score["username"].ToString(),
+                            score = Int32.Parse(score["score"].ToString()),
+                            scorePr = score["scorePr"].ToString(),
+                            WP = Int32.Parse(score["WP"].ToString())
+                        };
+                        userClassList.Add(user);
+                    }
+                    return userClassList;
+                }
             }
             return userClassList;
         }
 
-        private async void UpdateLeaderboards(string songCat)
+        private async void UpdateLeaderboards()
         {
             list25.data.Clear();
             list26.data.Clear();
-            string response = await GetAsync($"{webServerUrl}/getTopUsers");
-            if (response == null)
-            {
-                Console.WriteLine("Error");
-                return;
-            }
-            List<UserObject> userClassList25 = new List<UserObject>();
-            List<UserObject> userClassList26 = new List<UserObject>();
-            JObject data = JObject.Parse(response);
-            switch (songCat)
-            {
-                case "acc":
-                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "acc");
-                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "acc");
-                    break;
-                case "mid":
-                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "mid");
-                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "mid");
-                    break;
-                case "speed":
-                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "speed");
-                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "speed");
-                    break;
-                case "funny":
-                    userClassList25 = await ParseJsonToObject(data["top25"].ToObject<JObject>(), "funny");
-                    userClassList26 = await ParseJsonToObject(data["top26"].ToObject<JObject>(), "funny");
-                    break;
-            }
-
+            List<UserObject> userClassList25 = await ParseJsonToObject(totalScoreData["top25"], weeklySongsList[weeklySongsListIndex].hash);
+            List<UserObject> userClassList26 = await ParseJsonToObject(totalScoreData["top26"], weeklySongsList[weeklySongsListIndex].hash);
             list25.data.AddRange(Enumerable.Range(0, userClassList25.Count).Select(i =>
             {
                 string rawFirstListLine = $"   {i + 1}#  {userClassList25[i].username}";
@@ -185,7 +223,6 @@ namespace BSNO_Score_Uploader.UI
                 string listLine = rawFirstListLine + spaceString + rawSecondListLine;
                 return new CustomListTableData.CustomCellInfo(listLine);
             }).ToList());
-
             list26.data.AddRange(Enumerable.Range(0, userClassList26.Count).Select(i =>
             {
                 string rawFirstListLine = $"   {i + 1}#  {userClassList26[i].username}";
@@ -204,20 +241,6 @@ namespace BSNO_Score_Uploader.UI
             list25.tableView?.ReloadData();
             list26.tableView?.ReloadData();
         }
-
-        private async Task<string> GetAsync(string url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            request.Timeout = 400;
-
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return await reader.ReadToEndAsync();
-            }
-        }
     }
 
     class UserObject
@@ -230,13 +253,10 @@ namespace BSNO_Score_Uploader.UI
 
     class WeeklySongsObject
     {
-        public string currentAccSong;
-        public string currentAccSongDiff;
-        public string currentMidSong;
-        public string currentMidSongDiff;
-        public string currentSpeedSong;
-        public string currentSpeedSongDiff;
-        public string currentFunnySong;
-        public string currentFunnySongDiff;
+        public string hash;
+        public string diff;
+        public string type;
+        public string points;
+        public string songName;
     }
 }

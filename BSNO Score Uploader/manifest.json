@@ -5,7 +5,7 @@
   "author": "BungiCraft",
   "version": "0.0.4",
   "description": "Gets specific scores from game so they can be used for BSNO weekly challenge",
-  "gameVersion": "1.17.1",
+  "gameVersion": "1.18.0",
   "dependsOn": {
     "BSIPA": "^4.0.5"
   },

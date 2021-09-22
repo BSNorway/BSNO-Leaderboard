@@ -3,10 +3,9 @@
     <text text='Choose a song' align='Center' font-size='8'></text>
   </horizontal>
   <horizontal horizontal-fit='PreferredSize' spacing='6'>
-    <button text='Acc' font-size='4' on-click='btn1Click'></button>
-    <button text='Midspeed' font-size='4' on-click='btn2Click'></button>
-    <button text='Speed' font-size='4' on-click='btn3Click'></button>
-    <button text='Funny' font-size='4' on-click='btn4Click'></button>
+    <page-button on-click='listLeft' direction='Left' pref-width='5' pref-height='10'></page-button>
+    <clickable-text align='Center' text='' on-click='selectTxtClick' id='clickTxt'></clickable-text>
+    <page-button on-click='listRight' direction='Right' pref-width='5' pref-height='10'></page-button>
   </horizontal>
   <horizontal spacing='4'>
     <vertical>
