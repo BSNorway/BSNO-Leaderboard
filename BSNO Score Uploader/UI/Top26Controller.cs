@@ -15,7 +15,7 @@ namespace BSNO_Score_Uploader.UI.Views
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.Top26Leaderboard.bsml")]
     public class Top26Controller : BSMLAutomaticViewController
     {
-        private string webServerUrl = "http://84.212.119.6:8260";
+        private readonly string webServerUrl = "https://bung-bsno-challenge.herokuapp.com";
 
         [UIComponent("list26")]
         private CustomListTableData list;

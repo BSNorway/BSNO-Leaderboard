@@ -89,7 +89,7 @@ namespace BSNO_Score_Uploader.Services
                 DateTime currentDate = DateTime.Now;
                 string modVersion = "0.0.4";
 
-                var httpWebReq = (HttpWebRequest)WebRequest.Create("http://84.212.119.6:8260/v2/json");
+                var httpWebReq = (HttpWebRequest)WebRequest.Create("https://bung-bsno-challenge.herokuapp.com/v2/json");
                 httpWebReq.ContentType = "application/json";
                 httpWebReq.Method = "POST";
                 httpWebReq.Timeout = 400;

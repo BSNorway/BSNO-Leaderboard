@@ -16,7 +16,7 @@ namespace BSNO_Score_Uploader.UI
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.song-leaderboard.bsml")]
     public class SongLeaderboardController : BSMLAutomaticViewController
     {
-        private readonly string webServerUrl = "http://84.212.119.6:8260";
+        private readonly string webServerUrl = "https://bung-bsno-challenge.herokuapp.com";
         private JObject totalScoreData;
         private List<WeeklySongsObject> weeklySongsList;
         private int weeklySongsListIndex = 0;
