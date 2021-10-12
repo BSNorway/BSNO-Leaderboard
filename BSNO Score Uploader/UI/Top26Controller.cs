@@ -15,8 +15,6 @@ namespace BSNO_Score_Uploader.UI.Views
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.Top26Leaderboard.bsml")]
     public class Top26Controller : BSMLAutomaticViewController
     {
-        private readonly string webServerUrl = "https://bung-bsno-challenge.herokuapp.com";
-
         [UIComponent("list26")]
         private CustomListTableData list;
 
@@ -47,7 +45,7 @@ namespace BSNO_Score_Uploader.UI.Views
         private async void LoadLeaderboard()
         {
             list.data.Clear();
-            string response = await GetAsync($"{webServerUrl}/v2/getTop26UsersPoints");
+            string response = await GetAsync($"{Config.webserverUrl}/api/v2/getTop26UsersPoints");
             if (response == null)
             {
                 Console.WriteLine("Error. No response!");

@@ -85,11 +85,11 @@ namespace BSNO_Score_Uploader.Services
                 string levelHash = levelHashRaw.Substring(13);
                 string songName = arg1.difficultyBeatmap.level.songName;
                 string songDiff = arg1.difficultyBeatmap.difficultyRank.ToString();
-                int totalNotes = BS_Utils.Plugin.LevelData.GameplayCoreSceneSetupData.difficultyBeatmap.beatmapData.cuttableNotesType;
+                int totalNotes = arg1.difficultyBeatmap.beatmapData.cuttableNotesCount;
                 DateTime currentDate = DateTime.Now;
                 string modVersion = "0.0.4";
 
-                var httpWebReq = (HttpWebRequest)WebRequest.Create("https://bung-bsno-challenge.herokuapp.com/v2/json");
+                var httpWebReq = (HttpWebRequest)WebRequest.Create($"{Config.webserverUrl}/api/v2/json");
                 httpWebReq.ContentType = "application/json";
                 httpWebReq.Method = "POST";
                 httpWebReq.Timeout = 400;

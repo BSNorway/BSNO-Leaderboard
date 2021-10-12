@@ -16,7 +16,6 @@ namespace BSNO_Score_Uploader.UI
     [ViewDefinition("BSNO_Score_Uploader.UI.Views.song-leaderboard.bsml")]
     public class SongLeaderboardController : BSMLAutomaticViewController
     {
-        private readonly string webServerUrl = "https://bung-bsno-challenge.herokuapp.com";
         private JObject totalScoreData;
         private List<WeeklySongsObject> weeklySongsList;
         private int weeklySongsListIndex = 0;
@@ -129,7 +128,7 @@ namespace BSNO_Score_Uploader.UI
 
         private async Task<List<WeeklySongsObject>> GetWeeklySongs()
         {
-            string response = await GetAsync($"{webServerUrl}/v2/getWeeklyMaps");
+            string response = await GetAsync($"{Config.webserverUrl}/api/v2/getWeeklyMaps");
             if (response == null)
             {
                 Console.WriteLine("Error. No response!");
@@ -153,7 +152,7 @@ namespace BSNO_Score_Uploader.UI
 
         private async Task<JObject> GetTotalScores()
         {
-            string response = await GetAsync($"{webServerUrl}/v2/getTopUsers");
+            string response = await GetAsync($"{Config.webserverUrl}/api/v2/getTopUsers");
             if (response == null)
             {
                 Console.WriteLine("Error");
