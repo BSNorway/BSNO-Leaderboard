@@ -28,43 +28,38 @@ namespace BSNO_Score_Uploader.Services
                 }
             }
 
-            bool firstTime = true;
             int i = 0;
-            while (i < 3) // Attempt to upload score 3 times before stopping
+            retry:
+            try
             {
-                switch (firstTime)
+                bool result = await AttemptScoreUpload(arg1, arg2);
+                if (result)
                 {
-                    case true:
-                        bool result = await AttemptScoreUpload(arg1, arg2);
-                        switch (result)
-                        {
-                            case true:
-                                Console.WriteLine("BSNO-ScoreUploader: Score has been uploaded!");
-                                return;
-                            case false:
-                                Console.WriteLine($"BSNO-ScoreUploader: Retry Nr. {i}");
-                                i++;
-                                firstTime = false;
-                                break;
-                        }
-                        break;
-                    case false:
-                        await Task.Delay(20);
-                        bool result2 = await AttemptScoreUpload(arg1, arg2);
-                        switch (result2)
-                        {
-                            case true:
-                                Console.WriteLine("BSNO-ScoreUploader: Score has been uploaded!");
-                                return;
-                            case false:
-                                Console.WriteLine($"BSNO-ScoreUploader: Retry Nr. {i}");
-                                i++;
-                                firstTime = false;
-                                break;
-                        }
-                        break;
+                    Console.WriteLine("BSNO-ScoreUploader: Score has been uploaded!");
                 }
-                
+                else if (!result && i < 3)
+                {
+                    Console.WriteLine($"BSNO-ScoreUploader: Retry Nr. {i}");
+                    i++;
+                    goto retry;
+                }
+                else
+                {
+                    Console.WriteLine("BSNO-ScoreUploader: Score failed to upload.");
+                }
+            }
+            catch
+            {
+                if(i >= 3)
+                {
+                    Console.WriteLine("BSNO-ScoreUploader: Score failed to upload.");
+                }
+                else
+                {
+                    Console.WriteLine($"BSNO-ScoreUploader: Retry Nr. {i}");
+                    i++;
+                    goto retry;
+                }
             }
         }
 
@@ -79,15 +74,10 @@ namespace BSNO_Score_Uploader.Services
                 }
 
                 UserInfo userInfo = await BS_Utils.Gameplay.GetUserInfo.GetUserAsync();
-                string userId = userInfo.platformUserId;
-                string username = userInfo.userName;
-                string levelHashRaw = arg1.difficultyBeatmap.level.levelID;
-                string levelHash = levelHashRaw.Substring(13);
+                string levelHash = arg1.difficultyBeatmap.level.levelID.Substring(13);
                 string songName = arg1.difficultyBeatmap.level.songName;
                 string songDiff = arg1.difficultyBeatmap.difficultyRank.ToString();
                 int totalNotes = arg1.difficultyBeatmap.beatmapData.cuttableNotesCount;
-                DateTime currentDate = DateTime.Now;
-                string modVersion = "0.0.4";
 
                 var httpWebReq = (HttpWebRequest)WebRequest.Create($"{Config.webserverUrl}/api/v2/json");
                 httpWebReq.ContentType = "application/json";
@@ -96,7 +86,7 @@ namespace BSNO_Score_Uploader.Services
 
                 using (var streamWriter = new StreamWriter(httpWebReq.GetRequestStream()))
                 {
-                    LevelResults levelResults = new LevelResults(userId, username, levelHash, songName, currentDate, arg2.modifiedScore, arg2.averageCutScore, arg2.maxCombo, arg2.missedCount, songDiff, totalNotes, modVersion);
+                    LevelResults levelResults = new LevelResults(userInfo.platformUserId, userInfo.userName, levelHash, songName, DateTime.Now, arg2.modifiedScore, arg2.averageCutScore, arg2.maxCombo, arg2.missedCount, songDiff, totalNotes, Config.modVersion);
 
                     streamWriter.Write(JsonConvert.SerializeObject(levelResults));
                 }
