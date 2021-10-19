@@ -29,12 +29,13 @@ namespace BSNO_Score_Uploader.UI
             weeklySongsList = await GetWeeklySongs();
             if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
             {
-                clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n({weeklySongsList[weeklySongsListIndex].type})";
-            } else
-            {
-                clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n({weeklySongsList[weeklySongsListIndex].type})";
+                clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
             }
-            
+            else
+            {
+                clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
+            }
+
         }
 
         #region SelectionUI
@@ -53,11 +54,11 @@ namespace BSNO_Score_Uploader.UI
                 weeklySongsListIndex--;
                 if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
                 {
-                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n({weeklySongsList[weeklySongsListIndex].type})";
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
                 else
                 {
-                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n({weeklySongsList[weeklySongsListIndex].type})";
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
             }
         }
@@ -69,11 +70,11 @@ namespace BSNO_Score_Uploader.UI
                 weeklySongsListIndex++;
                 if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
                 {
-                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n({weeklySongsList[weeklySongsListIndex].type})";
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
                 else
                 {
-                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n({weeklySongsList[weeklySongsListIndex].type})";
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
             }
         }
