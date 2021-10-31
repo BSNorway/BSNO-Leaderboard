@@ -77,8 +77,6 @@ namespace BSNO_Score_Uploader.Services
                 string levelHash = arg1.difficultyBeatmap.level.levelID.Substring(13);
                 string songName = arg1.difficultyBeatmap.level.songName;
                 string songDiff = arg1.difficultyBeatmap.difficultyRank.ToString();
-                string levelId = SongCore.Collections.hashForLevelID(levelHash);
-                int totalNotes = arg1.difficultyBeatmap.beatmapData.cuttableNotesCount;
                 
                 var httpWebReq = (HttpWebRequest)WebRequest.Create($"{Config.webserverUrl}/api/v2/json");
                 httpWebReq.ContentType = "application/json";
@@ -87,7 +85,7 @@ namespace BSNO_Score_Uploader.Services
 
                 using (var streamWriter = new StreamWriter(httpWebReq.GetRequestStream()))
                 {
-                    LevelResults levelResults = new LevelResults(userInfo.platformUserId, userInfo.userName, levelHash, songName, DateTime.Now, arg2.modifiedScore, arg2.averageCutScore, arg2.maxCombo, arg2.missedCount, songDiff, totalNotes, Config.modVersion);
+                    LevelResults levelResults = new LevelResults(userInfo.platformUserId, userInfo.userName, levelHash, songName, DateTime.Now, arg2.modifiedScore, arg2.averageCutScore, arg2.maxCombo, arg2.missedCount, songDiff, Config.modVersion);
                     streamWriter.Write(JsonConvert.SerializeObject(levelResults));
                 }
 
@@ -118,10 +116,9 @@ namespace BSNO_Score_Uploader.Services
         public int maxCombo;
         public int missedCount;
         public string songDiff;
-        public int totalNotes;
         public string modVersion;
 
-        public LevelResults(string userId, string username, string levelHash, string songName, DateTime currentDate, int modifiedScore, int averageCutScore, int maxCombo, int missedCount, string songDiff, int totalNotes, string modVersion)
+        public LevelResults(string userId, string username, string levelHash, string songName, DateTime currentDate, int modifiedScore, int averageCutScore, int maxCombo, int missedCount, string songDiff, string modVersion)
         {
             this.userId = userId;
             this.username = username;
@@ -133,7 +130,6 @@ namespace BSNO_Score_Uploader.Services
             this.maxCombo = maxCombo;
             this.missedCount = missedCount;
             this.songDiff = songDiff;
-            this.totalNotes = totalNotes;
             this.modVersion = modVersion;
         }
     }
