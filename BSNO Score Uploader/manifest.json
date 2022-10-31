@@ -3,13 +3,13 @@
   "id": "BSNO_Score_Uploader",
   "name": "BSNO Score Uploader",
   "author": "BungiCraft",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Gets specific scores from game so they can be used for the BSNO weekly challenge",
-  "gameVersion": "1.18.1",
+  "gameVersion": "1.25.0",
   "dependsOn": {
     "BSIPA": "^4.0.5",
     "BeatSaberMarkupLanguage": "^1.5.0",
-    "SiraUtil": "^2.5.8",
+    "SiraUtil": "^3.1.0",
     "BS Utils": "^1.10.0"
   }
 }

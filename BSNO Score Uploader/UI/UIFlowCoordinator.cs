@@ -1,7 +1,6 @@
 ﻿using HMUI;
 using BeatSaberMarkupLanguage;
 using BSNO_Score_Uploader.UI.Views;
-using SiraUtil.Tools;
 using Zenject;
 using System;
 
@@ -10,20 +9,18 @@ namespace BSNO_Score_Uploader.UI
     public class UIFlowCoordinator : FlowCoordinator
     {
         private MainFlowCoordinator _mainFlowCoordinator;
-        private SiraLog _siraLog;
 
         private SongLeaderboardController _songLeaderboardController;
         private Top25Controller _top25Controller;
         private Top26Controller _top26Controller;
 
         [Inject]
-        public void Construct(MainFlowCoordinator mainFlowCoordinator, SongLeaderboardController songLeaderboardController, Top25Controller top25Controller, Top26Controller top26Controller, SiraLog siraLog)
+        public void Construct(MainFlowCoordinator mainFlowCoordinator, SongLeaderboardController songLeaderboardController, Top25Controller top25Controller, Top26Controller top26Controller)
         {
             _mainFlowCoordinator = mainFlowCoordinator;
             _songLeaderboardController = songLeaderboardController;
             _top25Controller = top25Controller;
             _top26Controller = top26Controller;
-            _siraLog = siraLog;
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -39,7 +36,7 @@ namespace BSNO_Score_Uploader.UI
             }
             catch (Exception ex)
             {
-                _siraLog.Error(ex);
+                Console.WriteLine(ex);
             }
         }
 

@@ -8,11 +8,16 @@ using Zenject;
 
 namespace BSNO_Score_Uploader.Services
 {
-    public class EventService : IInitializable
+    public class EventService : IInitializable, IDisposable
     {
         public void Initialize()
         {
             BSEvents.levelCleared += BSEvents_levelLeft;
+        }
+
+        public void Dispose()
+        {
+            BSEvents.levelCleared -= BSEvents_levelLeft;
         }
 
         async private void BSEvents_levelLeft(StandardLevelScenesTransitionSetupDataSO arg1, LevelCompletionResults arg2)
@@ -67,7 +72,7 @@ namespace BSNO_Score_Uploader.Services
         {
             try
             {
-                if (arg2.gameplayModifiers.ghostNotes || arg2.gameplayModifiers.noArrows || arg2.gameplayModifiers.noBombs || arg2.gameplayModifiers.zenMode || arg2.gameplayModifiers.disappearingArrows || arg2.gameplayModifiers.songSpeed != GameplayModifiers.SongSpeed.Normal || arg2.gameplayModifiers.demoNoObstacles)
+                if (arg2.gameplayModifiers.ghostNotes || arg2.gameplayModifiers.noArrows || arg2.gameplayModifiers.noBombs || arg2.gameplayModifiers.zenMode || arg2.gameplayModifiers.disappearingArrows || arg2.gameplayModifiers.songSpeed != GameplayModifiers.SongSpeed.Normal)
                 {
                     // If modifiers is turned on then dont upload
                     return true;
@@ -85,7 +90,7 @@ namespace BSNO_Score_Uploader.Services
 
                 using (var streamWriter = new StreamWriter(httpWebReq.GetRequestStream()))
                 {
-                    LevelResults levelResults = new LevelResults(userInfo.platformUserId, userInfo.userName, levelHash, songName, DateTime.Now, arg2.modifiedScore, arg2.averageCutScore, arg2.maxCombo, arg2.missedCount, songDiff, Config.modVersion);
+                    LevelResults levelResults = new LevelResults(userInfo.platformUserId, userInfo.userName, levelHash, songName, DateTime.Now, arg2.modifiedScore, (int)Math.Round(arg2.averageCutScoreForNotesWithFullScoreScoringType), arg2.maxCombo, arg2.missedCount, songDiff, Config.modVersion);
                     streamWriter.Write(JsonConvert.SerializeObject(levelResults));
                 }
 

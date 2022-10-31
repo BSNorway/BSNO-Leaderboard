@@ -178,7 +178,7 @@ namespace BSNO_Score_Uploader.UI
 
         #endregion
 
-        private async Task<List<UserObject>> ParseJsonToObject(JToken data, string hash)
+        private Task<List<UserObject>> ParseJsonToObject(JToken data, string hash)
         {
             List<UserObject> userClassList = new List<UserObject>();
             foreach (var songs in data)
@@ -196,10 +196,10 @@ namespace BSNO_Score_Uploader.UI
                         };
                         userClassList.Add(user);
                     }
-                    return userClassList;
+                    return Task.FromResult(userClassList);
                 }
             }
-            return userClassList;
+            return Task.FromResult(userClassList);
         }
 
         private async void UpdateLeaderboards()

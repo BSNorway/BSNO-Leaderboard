@@ -13,7 +13,7 @@ namespace BSNO_Score_Uploader.UI
 
         public MenuButtonUI(MainFlowCoordinator mainFlowCoordinator, UIFlowCoordinator uiFlowCoordinator)
         {
-            _menuButton = new MenuButton("BSNO", "BSNO weekly leaderboard", MenuButtonClicked, true);
+            _menuButton = new MenuButton("BSNO", "BSNO MonthlyChamp", MenuButtonClicked, true);
             _mainFlowCoordinator = mainFlowCoordinator;
             _uiFlowCoordinator = uiFlowCoordinator;
         }
