@@ -133,8 +133,6 @@
     <Compile Include="UI\MenuButtonUI.cs" />
     <Compile Include="UI\SongLeaderboardController.cs" />
     <Compile Include="UI\UIFlowCoordinator.cs" />
-    <Compile Include="UI\Top26Controller.cs" />
-    <Compile Include="UI\Top25Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
@@ -142,14 +140,6 @@
   <ItemGroup>
     <None Include="BSNO_Score_Uploader.csproj.user" Condition="Exists('BSNO_Score_Uploader.csproj.user')" />
     <EmbeddedResource Include="UI\Views\song-leaderboard.bsml" />
-    <EmbeddedResource Include="UI\Views\Top25Leaderboard.bsml" />
-    <EmbeddedResource Include="UI\MainMenuyController.bsml">
-      <DependentUpon>Top25Controller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Views\Top26Leaderboard.bsml" />
-    <EmbeddedResource Include="UI\MainMenuyController - Copy.bsml">
-      <DependentUpon>Top26Controller.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">

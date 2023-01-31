@@ -1,6 +1,5 @@
 ﻿using HMUI;
 using BeatSaberMarkupLanguage;
-using BSNO_Score_Uploader.UI.Views;
 using Zenject;
 using System;
 
@@ -11,16 +10,12 @@ namespace BSNO_Score_Uploader.UI
         private MainFlowCoordinator _mainFlowCoordinator;
 
         private SongLeaderboardController _songLeaderboardController;
-        private Top25Controller _top25Controller;
-        private Top26Controller _top26Controller;
 
         [Inject]
-        public void Construct(MainFlowCoordinator mainFlowCoordinator, SongLeaderboardController songLeaderboardController, Top25Controller top25Controller, Top26Controller top26Controller)
+        public void Construct(MainFlowCoordinator mainFlowCoordinator, SongLeaderboardController songLeaderboardController)
         {
             _mainFlowCoordinator = mainFlowCoordinator;
             _songLeaderboardController = songLeaderboardController;
-            _top25Controller = top25Controller;
-            _top26Controller = top26Controller;
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -31,7 +26,7 @@ namespace BSNO_Score_Uploader.UI
                 {
                     SetTitle("BSNO Leaderboard");
                     showBackButton = true;
-                    this.ProvideInitialViewControllers(_songLeaderboardController, _top26Controller, _top25Controller);
+                    this.ProvideInitialViewControllers(_songLeaderboardController);
                 }
             }
             catch (Exception ex)

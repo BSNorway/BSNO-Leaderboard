@@ -3,7 +3,7 @@
   "id": "BSNO_Score_Uploader",
   "name": "BSNO Score Uploader",
   "author": "BungiCraft",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Gets specific scores from game so they can be used for the BSNO weekly challenge",
   "gameVersion": "1.25.0",
   "dependsOn": {

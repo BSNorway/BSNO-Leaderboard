@@ -3,6 +3,6 @@
     public class Config
     {
         public static string webserverUrl = "https://bsno-wc.herokuapp.com";
-        public static string modVersion = "0.0.5";
+        public static string modVersion = "0.0.6";
     }
 }

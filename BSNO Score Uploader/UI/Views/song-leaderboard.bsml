@@ -1,24 +1,28 @@
 ﻿<vertical bg="round-rect-panel" child-expand-height='false' spacing='2' pad-top='2' pad-bottom='2' min-width='120'>
   <horizontal bg='panel-top' pad-left='15' pad-right='15' horizontal-fit='PreferredSize'>
-    <text text='Choose a song' align='Center' font-size='8'></text>
+    <text text='Choose a rank' id='topRankText' align='Center' font-size='8'></text>
   </horizontal>
   <horizontal horizontal-fit='PreferredSize' spacing='6'>
+    <button text='top 10' on-click='top10btn' min-height='10' min-width='12'></button>
+    <button text='top 25' on-click='top25btn' min-height='10' min-width='12'></button>
     <page-button on-click='listLeft' direction='Left' pref-width='5' pref-height='10'></page-button>
     <clickable-text align='Center' text='' on-click='selectTxtClick' id='clickTxt'></clickable-text>
     <page-button on-click='listRight' direction='Right' pref-width='5' pref-height='10'></page-button>
+    <button text='top 50' on-click='top50btn' min-height='10' min-width='12'></button>
+    <button text='top 51+' on-click='top100btn' min-height='10' min-width='12'></button>
   </horizontal>
   <horizontal spacing='4'>
     <vertical>
-      <text text='Top 26+' align='Center' font-size='4'></text>
-      <page-button on-click='listUp26' direction='Up' pref-width='30' pref-height='5'></page-button>
-      <list id='list26' list-style='Simple' list-width='80' visible-cells='4'></list>
-      <page-button on-click='listDown26' direction='Down' pref-width='30' pref-height='5'></page-button>
+      <text text='Overall' align='Center' font-size='4'></text>
+      <page-button on-click='overallListUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+      <list id='overallList' list-style='Simple' list-width='80' visible-cells='4'></list>
+      <page-button on-click='overallListDown' direction='Down' pref-width='30' pref-height='5'></page-button>
     </vertical>
     <vertical>
-      <text text='Top 25' align='Center' font-size='4'></text>
-      <page-button on-click='listUp25' direction='Up' pref-width='30' pref-height='5'></page-button>
-      <list id='list25' list-style='Simple' list-width='80' visible-cells='4'></list>
-      <page-button on-click='listDown25' direction='Down' pref-width='30' pref-height='5'></page-button>
+      <text text='Map' align='Center' font-size='4'></text>
+      <page-button on-click='mapListUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+      <list id='mapList' list-style='Simple' list-width='80' visible-cells='4'></list>
+      <page-button on-click='mapListDown' direction='Down' pref-width='30' pref-height='5'></page-button>
     </vertical>
   </horizontal>
   

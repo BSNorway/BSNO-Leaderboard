@@ -1,8 +1,0 @@
-﻿<vertical bg="round-rect-panel" child-expand-height='false' spacing='2' pad-top='2' pad-bottom='2' min-width='80'>
-  <horizontal bg='panel-top' pad-left='15' pad-right='15' horizontal-fit='PreferredSize'>
-    <text text='Top 25' align='Center' font-size='8'/>
-  </horizontal>
-  <page-button on-click='listUp' direction='Up' pref-width='30' pref-height='5'></page-button>
-  <list id='list25' list-style='Simple' list-width='100' visible-cells='6'></list>
-  <page-button on-click='listDown' direction='Down' pref-width='30' pref-height='5'></page-button>
-</vertical>

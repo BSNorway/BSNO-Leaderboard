@@ -19,12 +19,13 @@ namespace BSNO_Score_Uploader.UI
         private JObject totalScoreData;
         private List<WeeklySongsObject> weeklySongsList;
         private int weeklySongsListIndex = 0;
+        private string currentRankCatagory = "none";
 
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-            list25.data.Clear();
-            list26.data.Clear();
+            overallList.data.Clear();
+            mapList.data.Clear();
             totalScoreData = await GetTotalScores();
             weeklySongsList = await GetWeeklySongs();
             if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
@@ -37,6 +38,95 @@ namespace BSNO_Score_Uploader.UI
             }
 
         }
+
+        #region RankButtons
+
+        [UIComponent("topRankText")]
+        private TextMeshProUGUI topRankText;
+
+        [UIAction("top10btn")]
+        private async Task Top10BtnActionAsync()
+        {
+            topRankText.text = "TOP 10";
+            currentRankCatagory = "top10";
+            await UpdateOverallLeaderboard("getTop10UsersPoints");
+            mapList.data.Clear();
+        }
+
+        [UIAction("top25btn")]
+        private async Task Top25BtnActionAsync()
+        {
+            topRankText.text = "TOP 25";
+            currentRankCatagory = "top25";
+            await UpdateOverallLeaderboard("getTop25UsersPoints");
+            mapList.data.Clear();
+        }
+
+        [UIAction("top50btn")]
+        private async Task Top50BtnActionAsync()
+        {
+            topRankText.text = "TOP 50";
+            currentRankCatagory = "top50";
+            await UpdateOverallLeaderboard("getTop50UsersPoints");
+            mapList.data.Clear();
+        }
+
+        [UIAction("top100btn")]
+        private async Task Top100BtnActionAsync()
+        {
+            topRankText.text = "TOP 51+";
+            currentRankCatagory = "top100";
+            await UpdateOverallLeaderboard("getTop100UsersPoints");
+            mapList.data.Clear();
+        }
+
+        private async Task UpdateOverallLeaderboard(string apiEndpoint)
+        {
+            overallList.data.Clear();
+            string response = await GetAsync($"{Config.webserverUrl}/api/v2/{apiEndpoint}");
+            if (response == null)
+            {
+                Console.WriteLine("Error. No response!");
+            }
+
+            List<LeaderboardDataObject> dataList = new List<LeaderboardDataObject>();
+            JObject data = JObject.Parse(response);
+            foreach (var item in data["users"])
+            {
+                LeaderboardDataObject c = new LeaderboardDataObject
+                {
+                    username = item["username"].ToString(),
+                    userId = item["userId"].ToString(),
+                    WP = Int32.Parse(item["WP"].ToString())
+                };
+                dataList.Add(c);
+            }
+            overallList.data.AddRange(Enumerable.Range(0, dataList.Count).Select(i =>
+            {
+                string rawFirstListLine = $"   {i + 1}#  {dataList[i].username}";
+                string rawSecondListLine = $"{dataList[i].WP} WP   ";
+                string combinedString = rawFirstListLine + rawSecondListLine;
+                int num = 80 - combinedString.Length;
+
+                string spaceString = " ";
+                for (int ind = 0; ind < num - 1; ind++)
+                {
+                    spaceString += " ";
+                }
+                string listLine = rawFirstListLine + spaceString + rawSecondListLine;
+                return new CustomListTableData.CustomCellInfo(listLine);
+            }).ToList());
+            overallList.tableView?.ReloadData();
+        }
+
+        class LeaderboardDataObject
+        {
+            public string username;
+            public string userId;
+            public int WP;
+        }
+
+        #endregion
 
         #region SelectionUI
 
@@ -52,13 +142,13 @@ namespace BSNO_Score_Uploader.UI
             if (weeklySongsListIndex != 0)
             {
                 weeklySongsListIndex--;
-                if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
+                if (weeklySongsList[weeklySongsListIndex].songName.Length <= 40)
                 {
                     clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
                 else
                 {
-                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 40)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
             }
         }
@@ -68,13 +158,13 @@ namespace BSNO_Score_Uploader.UI
             if (weeklySongsListIndex != weeklySongsList.Count - 1)
             {
                 weeklySongsListIndex++;
-                if (weeklySongsList[weeklySongsListIndex].songName.Length <= 50)
+                if (weeklySongsList[weeklySongsListIndex].songName.Length <= 40)
                 {
                     clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
                 else
                 {
-                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 50)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
+                    clickTxt.text = $"{weeklySongsList[weeklySongsListIndex].songName.Substring(0, 40)}\n[{weeklySongsList[weeklySongsListIndex].diff}]\n({weeklySongsList[weeklySongsListIndex].type})";
                 }
             }
         }
@@ -83,44 +173,44 @@ namespace BSNO_Score_Uploader.UI
 
         #region TopLeaderboards
 
-        [UIComponent("list25")]
-        private CustomListTableData list25;
-        [UIComponent("list26")]
-        private CustomListTableData list26;
+        [UIComponent("overallList")]
+        private CustomListTableData overallList;
+        [UIComponent("mapList")]
+        private CustomListTableData mapList;
 
-        [UIAction("listUp25")]
+        [UIAction("mapListUp")]
         private void ClickListUp25()
         {
-            List<TableCell> tableCellList = list25.tableView.visibleCells.ToList();
+            List<TableCell> tableCellList = mapList.tableView.visibleCells.ToList();
             if (tableCellList[0].idx == 3)
             {
-                list25.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
+                mapList.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
                 return;
             }
-            list25.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
+            mapList.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
         }
-        [UIAction("listDown25")]
+        [UIAction("mapListDown")]
         private void ClickListDown25()
         {
-            List<TableCell> tableCellList = list25.tableView.visibleCells.ToList();
-            list25.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
+            List<TableCell> tableCellList = mapList.tableView.visibleCells.ToList();
+            mapList.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
         }
-        [UIAction("listUp26")]
+        [UIAction("overallListUp")]
         private void ClickListUp26()
         {
-            List<TableCell> tableCellList = list26.tableView.visibleCells.ToList();
+            List<TableCell> tableCellList = overallList.tableView.visibleCells.ToList();
             if (tableCellList[0].idx == 3)
             {
-                list26.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
+                overallList.tableView.ScrollToCellWithIdx(0, TableView.ScrollPositionType.Beginning, true);
                 return;
             }
-            list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
+            overallList.tableView.ScrollToCellWithIdx(tableCellList[0].idx - 4, TableView.ScrollPositionType.Beginning, true);
         }
-        [UIAction("listDown26")]
+        [UIAction("overallListDown")]
         private void ClickListDown26()
         {
-            List<TableCell> tableCellList = list26.tableView.visibleCells.ToList();
-            list26.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
+            List<TableCell> tableCellList = overallList.tableView.visibleCells.ToList();
+            overallList.tableView.ScrollToCellWithIdx(tableCellList[0].idx + 4, TableView.ScrollPositionType.Beginning, true);
         }
 
         #endregion
@@ -204,14 +294,13 @@ namespace BSNO_Score_Uploader.UI
 
         private async void UpdateLeaderboards()
         {
-            list25.data.Clear();
-            list26.data.Clear();
-            List<UserObject> userClassList25 = await ParseJsonToObject(totalScoreData["top25"], weeklySongsList[weeklySongsListIndex].hash);
-            List<UserObject> userClassList26 = await ParseJsonToObject(totalScoreData["top26"], weeklySongsList[weeklySongsListIndex].hash);
-            list25.data.AddRange(Enumerable.Range(0, userClassList25.Count).Select(i =>
+            if (currentRankCatagory == "none") return; // Dont do anything if no catagory has been chosen
+            mapList.data.Clear();
+            List<UserObject> userMapList = await ParseJsonToObject(totalScoreData[currentRankCatagory], weeklySongsList[weeklySongsListIndex].hash);
+            mapList.data.AddRange(Enumerable.Range(0, userMapList.Count).Select(i =>
             {
-                string rawFirstListLine = $"   {i + 1}#  {userClassList25[i].username}";
-                string rawSecondListLine = $"{userClassList25[i].score} --- {userClassList25[i].scorePr + "%"} --- {userClassList25[i].WP} WP   ";
+                string rawFirstListLine = $"   {i + 1}#  {userMapList[i].username}";
+                string rawSecondListLine = $"{userMapList[i].score} --- {userMapList[i].scorePr + "%"} --- {userMapList[i].WP} WP   ";
                 string combinedString = rawFirstListLine + rawSecondListLine;
                 int num = 60 - combinedString.Length;
 
@@ -223,23 +312,7 @@ namespace BSNO_Score_Uploader.UI
                 string listLine = rawFirstListLine + spaceString + rawSecondListLine;
                 return new CustomListTableData.CustomCellInfo(listLine);
             }).ToList());
-            list26.data.AddRange(Enumerable.Range(0, userClassList26.Count).Select(i =>
-            {
-                string rawFirstListLine = $"   {i + 1}#  {userClassList26[i].username}";
-                string rawSecondListLine = $"{userClassList26[i].score} --- {userClassList26[i].scorePr + "%"} --- {userClassList26[i].WP} WP   ";
-                string combinedString = rawFirstListLine + rawSecondListLine;
-                int num = 60 - combinedString.Length;
-
-                string spaceString = " ";
-                for (int ind = 0; ind < num - 1; ind++)
-                {
-                    spaceString += " ";
-                }
-                string listLine = rawFirstListLine + spaceString + rawSecondListLine;
-                return new CustomListTableData.CustomCellInfo(listLine);
-            }).ToList());
-            list25.tableView?.ReloadData();
-            list26.tableView?.ReloadData();
+            mapList.tableView?.ReloadData();
         }
     }
 
